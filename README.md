@@ -222,19 +222,6 @@ python scripts/rebuild_classification_features.py   # leakage sanity: old (leaky
 - **`validate_artifacts.py`** — checks every CSV is present, schema-correct, mutually consistent (feature/label customer sets match), leakage-free (Recency ≥ 0, best AUC in a realistic range), placeholder-free, and that the deck has 20 slides. Exit code 0 = ready to submit.
 - **CI** — `.github/workflows/ci.yml` runs `compileall` + `pytest` on every push and pull request.
 
----
-
-## Deliverables Checklist
-
-- [x] Source code: modular `src/`, one-command pipeline, tests, CI, artifact validator
-- [x] All 6 notebooks run top-to-bottom without errors (verified via `nbconvert --execute`)
-- [x] Leakage-free, reproducible artifacts + `manifest.json` provenance
-- [ ] `reports/ieee_report.pdf` (8–10 pages, IEEE format)
-- [x] `reports/slides.pdf` (≤20 slides — `slides.pptx` auto-generated, export to PDF)
-- [ ] GitHub repo public + dataset link in report
-- [ ] Oral presentation 09/06/2026
-
----
 
 ## License
 
