@@ -1,0 +1,3 @@
+Model,AUC,F1,Precision,Recall,Accuracy
+LogisticRegression,0.785,0.7392,0.7698,0.711,0.7124
+MLP,0.7832,0.7381,0.7561,0.7209,0.7067

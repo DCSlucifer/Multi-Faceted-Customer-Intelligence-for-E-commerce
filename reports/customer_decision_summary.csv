@@ -1,0 +1,29 @@
+recommended_action,churn_risk_tier,customer_value_tier,segment,n_customers,share_of_customers,avg_monetary,avg_churn_probability,anomaly_count
+VIP nurture / Cross-sell,Low,High,1,1153,0.2197,8124.06,0.1793,180
+Win-back campaign,High,Low,0,930,0.1772,164.95,0.8526,1
+Monitor / Standard nurture,Medium,Medium,0,647,0.1233,729.23,0.5558,0
+Monitor / Standard nurture,Low,Medium,1,647,0.1233,1292.41,0.3043,0
+Win-back campaign,High,Medium,0,571,0.1088,594.63,0.8001,14
+Monitor / Standard nurture,Medium,Medium,1,441,0.084,862.43,0.512,0
+Monitor / Standard nurture,Medium,Low,0,316,0.0602,202.49,0.5949,0
+Monitor / Standard nurture,Low,Medium,0,91,0.0173,781.85,0.3641,0
+Win-back campaign,High,Medium,1,83,0.0158,699.67,0.7726,0
+Reactivation campaign,Medium,Medium,0,72,0.0137,1118.16,0.6437,0
+Monitor / Standard nurture,Medium,High,1,68,0.013,2800.24,0.4733,0
+Monitor / Standard nurture,Medium,Low,1,42,0.008,222.8,0.5492,0
+Reactivation campaign,Medium,Medium,1,32,0.0061,1275.48,0.6272,0
+Reactivation campaign,Medium,High,1,27,0.0051,3155.87,0.5711,0
+Reactivation campaign,Medium,High,0,18,0.0034,2346.42,0.6121,0
+Retain immediately,High,High,0,18,0.0034,3215.95,0.7686,7
+Win-back campaign,High,Low,1,18,0.0034,201.04,0.8234,0
+Manual review,Medium,Medium,1,16,0.003,1244.8,0.5069,16
+Manual review,Medium,Medium,0,15,0.0029,1246.78,0.5738,15
+Manual review,Medium,High,1,15,0.0029,6706.02,0.4779,15
+Monitor / Standard nurture,Medium,High,0,9,0.0017,2250.88,0.5394,0
+Manual review,Low,Medium,1,8,0.0015,1430.21,0.3079,8
+Manual review,Medium,High,0,4,0.0008,3007.86,0.6003,4
+Monitor / Standard nurture,Low,Low,1,2,0.0004,200.59,0.3531,0
+Monitor / Standard nurture,Low,Low,0,2,0.0004,261.6,0.3669,0
+Manual review,Medium,Low,0,2,0.0004,235.52,0.4581,2
+VIP nurture / Cross-sell,Low,High,0,1,0.0002,2579.38,0.3806,0
+Manual review,Low,Medium,0,1,0.0002,1710.96,0.3777,1

@@ -1,0 +1,6 @@
+FeatureGroup,n_features,CV_AUC_mean,CV_AUC_std,Test_AUC
+RFM_only,3,0.797,0.0183,0.7836
+Behavioral_only,3,0.7192,0.0127,0.7202
+RFM+Behavioral,6,0.7979,0.0171,0.7873
+RFM+Behavioral+Country,7,0.7984,0.0159,0.784
+Without_Recency,6,0.7624,0.0162,0.7546

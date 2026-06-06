@@ -1,0 +1,11 @@
+model,bin,mean_predicted_prob,fraction_positive,brier_score
+LogisticRegression,1,0.1,0.1048,0.1892
+LogisticRegression,2,0.2076,0.3333,0.1892
+LogisticRegression,3,0.2955,0.4095,0.1892
+LogisticRegression,4,0.3818,0.4667,0.1892
+LogisticRegression,5,0.4768,0.5048,0.1892
+LogisticRegression,6,0.5782,0.6571,0.1892
+LogisticRegression,7,0.6632,0.6952,0.1892
+LogisticRegression,8,0.7465,0.8,0.1892
+LogisticRegression,9,0.8234,0.8286,0.1892
+LogisticRegression,10,0.9131,0.9333,0.1892

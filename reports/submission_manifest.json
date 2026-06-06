@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-05-31T07:29:13+00:00",
+  "required_files": [
+    "README.md",
+    "overleaf/main.tex",
+    "reports/manifest.json",
+    "reports/slides.pptx",
+    "reports/classical_results.csv",
+    "reports/mlp_vs_classical.csv",
+    "reports/baseline_results.csv",
+    "reports/ablation_results.csv",
+    "reports/calibration_results.csv",
+    "reports/cluster_stability.csv",
+    "reports/association_rules.csv",
+    "models/LogisticRegression.joblib",
+    "models/RandomForest.joblib",
+    "models/mlp.pt",
+    "models/autoencoder.pt"
+  ],
+  "optional_files": [
+    "reports/slides.pdf",
+    "reports/ieee_report.pdf"
+  ],
+  "notes": "Export slides.pdf and ieee_report.pdf manually (no LaTeX/PowerPoint toolchain assumed)."
+}

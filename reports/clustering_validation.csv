@@ -1,0 +1,5 @@
+Algorithm,n_clusters,Silhouette,Davies-Bouldin,Calinski-Harabasz,Notes
+KMeans,2,0.4193,0.8865,5840.0136,"{'inertia': 8844.092933958687, 'centers': array([[ 0.55595428, -0.69787043, -0.67987344],
+       [-0.66068729,  0.8293382 ,  0.80795086]])}"
+DBSCAN,13,-0.1205,1.6319,741.9666,"{'eps': 0.20221103187005937, 'min_samples': 5, 'n_noise': 403}"
+AGNES,2,0.3878,0.7887,4303.9769,{'linkage': 'ward'}
