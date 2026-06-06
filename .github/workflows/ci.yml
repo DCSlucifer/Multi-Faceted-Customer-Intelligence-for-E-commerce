@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install test dependencies
+        # Lean install: the test suite runs on synthetic data and never needs
+        # the 45 MB dataset, torch, shap, or jupyterlab. torch-only tests skip
+        # automatically via pytest.importorskip.
+        run: |
+          python -m pip install --upgrade pip
+          pip install \
+            "numpy==1.26.4" "pandas==2.2.3" "scipy==1.13.1" \
+            "scikit-learn==1.5.2" "imbalanced-learn==0.12.4" "mlxtend==0.23.3" \
+            "joblib>=1.3" "pytest==9.0.3"
+
+      - name: Compile check
+        run: python -m compileall -q src scripts
+
+      - name: Run tests
+        run: python -m pytest -q
