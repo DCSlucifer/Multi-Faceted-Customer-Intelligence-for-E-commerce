@@ -62,8 +62,14 @@ def test_best_auc_is_realistic():
 
 
 def test_deep_learning_artifacts_exist_when_pipeline_ran():
-    if not A.ARTIFACTS["mlp_vs_classical"].exists():
-        pytest.skip("pipeline not run yet")
-    for key in ("mlp_model", "autoencoder_model", "dl_scalers", "mlp_metadata"):
+    model_keys = ("mlp_model", "autoencoder_model", "dl_scalers", "mlp_metadata")
+    # Deep-learning model binaries are local pipeline outputs and are gitignored.
+    # A clean CI clone may include generated report CSVs without these binaries.
+    if not any(A.ARTIFACTS[key].exists() for key in model_keys):
+        pytest.skip("deep-learning model artifacts not generated in this checkout")
+
+    missing = A.missing_artifacts(["mlp_vs_classical", *model_keys])
+    assert not missing, f"missing deep-learning artifacts: {missing}"
+    for key in model_keys:
         assert A.ARTIFACTS[key].exists(), f"{key} missing"
         assert A.ARTIFACTS[key].stat().st_size > 0, f"{key} empty"
