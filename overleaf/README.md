@@ -1,13 +1,41 @@
 # Overleaf — IEEE Report
 
-How to use this folder:
+This folder is a **self-contained** Overleaf project: `main.tex`, `references.bib`,
+and a `figures/` folder with every PNG referenced by the report.
 
-1. Create a new Overleaf project from the IEEE Conference template:
-   https://www.overleaf.com/latex/templates/ieee-conference-template/grfzhhncsfqn
-2. Upload `main.tex` and `references.bib` from this folder.
-3. Create a `figures/` folder in the Overleaf project and upload the PNGs from `reports/figures/` (only the ones referenced in `main.tex` are required; you can add more as you go).
-4. Search the source for `TODO` and fill in numbers / paragraphs after each notebook runs.
+## How to compile
 
-**Page budget:** keep total at 8–10 pages. Drop low-value figures rather than the cross-task synthesis figures (notebook 06).
+**Option A — Overleaf Workshop (VS Code):** open this `overleaf/` folder, log in to
+Overleaf via the extension, and push/sync. It compiles as-is.
 
-Compile with `pdflatex` (twice + bibtex). Final PDF should land in `reports/ieee_report.pdf`.
+**Option B — overleaf.com:** create a project from the IEEE Conference template
+(https://www.overleaf.com/latex/templates/ieee-conference-template/grfzhhncsfqn),
+then upload `main.tex`, `references.bib`, and the whole `figures/` folder.
+
+Compile with `pdflatex` → `bibtex` → `pdflatex` ×2 (so citations and cross-refs
+resolve). Export the result to `reports/ieee_report.pdf`.
+
+## What's inside
+
+- **12 figures**: architecture (Fig. 1), monthly revenue, K-means sweep, PCA/t-SNE,
+  ROC, calibration, association network, Apriori-vs-FP-Growth, SHAP, autoencoder,
+  churn-by-segment, segment×product heatmap.
+- **8 tables**: dataset stats, cleaning breakdown, clustering validation, classifier
+  leaderboard, honest baselines, feature-group ablation, top association rules,
+  churn/value per segment.
+- **16 references**, all cited in the text (no undefined `\cite`s).
+
+## Important notes
+
+- **Do not hand-edit metric numbers.** `main.tex` is GENERATED from
+  `main.template.tex` by `python -m src.report_renderer`. Edit prose in the
+  template, then re-render. The numbers come from the pipeline snapshot, so they
+  can never drift.
+- **If you re-run the pipeline** (figures change), re-copy them:
+  `cp reports/figures/*.png overleaf/figures/` (or just the referenced ones).
+- **Page budget (8–10 pages).** With all 12 figures + 8 tables the draft runs
+  long. To trim without losing the story, comment out the lowest-value floats
+  first — `fig:sweep` (Fig. 3), `fig:assocrt` (Apriori-vs-FP-Growth), and
+  `fig:ae` (autoencoder) — and **keep** the cross-task synthesis figures
+  (`fig:synth`, `fig:heatmap`) and the honest-evaluation tables, which carry the
+  paper's contribution.

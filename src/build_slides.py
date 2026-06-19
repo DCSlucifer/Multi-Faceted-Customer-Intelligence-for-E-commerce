@@ -186,9 +186,13 @@ def build_deck() -> Presentation:
         add_textbox(s, l, t + Inches(0.85), Inches(4.0), Inches(0.4),
                     lab, size=13, color=SUBINK, align=PP_ALIGN.CENTER)
     add_textbox(s, Inches(0.6), Inches(5.0), Inches(12), Inches(0.4),
-                "Columns: Invoice · StockCode · Description · Quantity · Price · InvoiceDate · CustomerID · Country",
+                "Columns (8, all transaction-level): Invoice · StockCode · Description · Quantity · Price · InvoiceDate · CustomerID · Country",
                 size=13, color=SUBINK)
-    add_textbox(s, Inches(0.6), Inches(5.5), Inches(12), Inches(0.4),
+    add_textbox(s, Inches(0.6), Inches(5.45), Inches(12), Inches(0.45),
+                "No customer attributes (name / contact / demographics) exist beyond the CustomerID key "
+                "— a null CustomerID therefore carries no recoverable customer information.",
+                size=12, bold=True, color=PRIMARY)
+    add_textbox(s, Inches(0.6), Inches(5.95), Inches(12), Inches(0.4),
                 "Source: https://archive.ics.uci.edu/dataset/502/online+retail+ii",
                 size=12, color=SUBINK)
     add_footer(s, 3)
@@ -205,18 +209,44 @@ def build_deck() -> Presentation:
 
     # ---------- 5. Preprocessing ----------------------------------------- #
     s = prs.slides.add_slide(blank)
-    add_title_bar(s, "Preprocessing", "From raw 1.07M rows to clean 805K rows")
-    add_bullets(s, Inches(0.5), Inches(1.3), Inches(12.3), Inches(2.5),
-                ["Drop ~25% rows with null CustomerID",
+    add_title_bar(s, "Preprocessing",
+                  "From raw 1.07M rows to clean 805K rows — only 24.5% dropped")
+    add_bullets(s, Inches(0.5), Inches(1.25), Inches(6.0), Inches(2.8),
+                ["Drop 22.8% rows with null CustomerID",
                  "Remove cancellation invoices (prefix 'C')",
                  "Drop non-positive Quantity / Price",
                  "Winsorize Quantity & Price at 1%/99% quantiles",
                  "Derive TotalAmount = Quantity × Price",
                  "Compute RFM + behavioral features per customer",
-                 "Label churn: no activity in 90 d after 2011-09-01"], size=14)
-    # Distributions figure is 3.2:1 — place full-width below bullets so it's readable
+                 "Label churn: no activity in 90 d after 2011-09-01"], size=13)
+    # Cleaning breakdown table — deterministic dataset facts (report Table II).
+    # Filters overlap, so per-filter shares need not sum to the total.
+    clean_rows = [["Filter removed", "% of raw rows"],
+                  ["Missing CustomerID", "22.8%"],
+                  ["Cancellation invoices (C)", "1.8%"],
+                  ["Non-positive Qty / Price", "2.4%"],
+                  ["Total rows removed", "24.5%"]]
+    tbl = s.shapes.add_table(rows=len(clean_rows), cols=2,
+                             left=Inches(6.8), top=Inches(1.35),
+                             width=Inches(6.1), height=Inches(2.2)).table
+    for i, row in enumerate(clean_rows):
+        for j, v in enumerate(row):
+            cell = tbl.cell(i, j); cell.text = v
+            p = cell.text_frame.paragraphs[0]
+            for r_ in p.runs:
+                r_.font.size = Pt(13)
+                r_.font.bold = (i == 0) or (i == len(clean_rows) - 1)
+                r_.font.color.rgb = RGBColor(0xFF,0xFF,0xFF) if i == 0 else INK
+            if i == 0:
+                cell.fill.solid(); cell.fill.fore_color.rgb = PRIMARY
+    add_textbox(s, Inches(6.8), Inches(3.65), Inches(6.1), Inches(0.9),
+                "Dropping null-CustomerID rows is mandatory (RFM / churn are "
+                "per-customer) yet costs only 3.5% of units & 13.7% of revenue "
+                "— almost no purchasing signal lost.",
+                size=12, bold=True, color=PRIMARY)
+    # Distributions figure is 3.2:1 — placed below, sized to clear the table/note.
     add_image(s, FIGURES_DIR / "01_distributions.png",
-              Inches(2.17), Inches(3.95), width=Inches(9.0))
+              Inches(3.37), Inches(4.6), width=Inches(6.6))
     add_textbox(s, Inches(0.5), Inches(6.78), Inches(12.3), Inches(0.25),
                 "Quantity / Price / TotalAmount distributions after winsorization",
                 size=11, color=SUBINK, align=PP_ALIGN.CENTER)
@@ -415,11 +445,13 @@ def build_deck() -> Presentation:
                 cell.fill.solid(); cell.fill.fore_color.rgb = PRIMARY
     add_image(s, FIGURES_DIR / "04_rule_network.png",
               Inches(8.3), Inches(1.4), width=Inches(4.8))
-    add_textbox(s, Inches(0.5), Inches(4.6), Inches(7.5), Inches(2),
+    add_textbox(s, Inches(0.5), Inches(4.6), Inches(7.5), Inches(2.1),
                 "Pattern: customers who buy one item from a colour or "
                 "themed set frequently complete the set. Operational use: "
-                "post-purchase recommendations and bundled retention offers.",
-                size=14, color=INK)
+                "post-purchase recommendations and bundled retention offers.\n"
+                "Rules are mined on customer-attributed invoices only — consistent "
+                "with the per-segment rules, and excluding anonymous wholesale/bulk baskets.",
+                size=13, color=INK)
     add_footer(s, 15)
 
     # ---------- 16. DL extension ---------------------------------------- #
@@ -443,7 +475,31 @@ def build_deck() -> Presentation:
     add_title_bar(s, "★ HEADLINE FINDING — Churn Rate by Segment",
                   "67-percentage-point gap between segments")
     add_image(s, FIGURES_DIR / "06_churn_by_cluster.png",
-              Inches(0.6), Inches(1.4), width=Inches(7.5))
+              Inches(0.5), Inches(1.4), height=Inches(3.4))
+    # Segment churn + value table (report Table VI), read from artifacts.
+    ccr = pd.read_csv(REPORTS_DIR / "cluster_churn_rate.csv").sort_values(
+        "avg_recency", ascending=False)
+    seg_names = ["Dormant", "Active loyal"]
+    seg_rows = [["Segment", "n", "Churn %", "Avg Recency", "Avg Monetary (£)"]]
+    for name, (_, r) in zip(seg_names, ccr.iterrows()):
+        seg_rows.append([name, f"{int(r['n_customers']):,}", f"{r['churn_rate']:.1f}",
+                         f"{r['avg_recency']:.1f}", f"{r['avg_monetary']:,.1f}"])
+    churn_overall = (ccr['n_customers'] * ccr['churn_rate']).sum() / ccr['n_customers'].sum()
+    seg_rows.append(["Overall", f"{int(ccr['n_customers'].sum()):,}",
+                     f"{churn_overall:.1f}", "—", "—"])
+    tbl = s.shapes.add_table(rows=len(seg_rows), cols=5,
+                             left=Inches(0.5), top=Inches(5.0),
+                             width=Inches(7.8), height=Inches(1.6)).table
+    for i, row in enumerate(seg_rows):
+        for j, v in enumerate(row):
+            cell = tbl.cell(i, j); cell.text = v
+            p = cell.text_frame.paragraphs[0]
+            for r_ in p.runs:
+                r_.font.size = Pt(12)
+                r_.font.bold = (i == 0) or (i == len(seg_rows) - 1)
+                r_.font.color.rgb = RGBColor(0xFF,0xFF,0xFF) if i == 0 else INK
+            if i == 0:
+                cell.fill.solid(); cell.fill.fore_color.rgb = PRIMARY
     # Big gap callout
     card = s.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
                               Inches(8.5), Inches(1.4), Inches(4.5), Inches(4.7))
